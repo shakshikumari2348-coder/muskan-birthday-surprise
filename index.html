@@ -132,7 +132,7 @@ const birthday = new Date("2026-10-24T00:00:00+05:30").getTime();
 const pinCorrect = "0786";
 let pin = "";
 let popped = 0;
-let unlocked = TEST_MODE || Date.now() >= birthday;
+let unlocked = true;
 
 function show(id){
  if(!unlocked && id !== "s-count") return;
