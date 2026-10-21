@@ -1,5 +1,3 @@
-HTML
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -413,44 +411,6 @@ p {
   margin-bottom: 14px;
 }
 
-.debug-panel {
-  position: fixed;
-  bottom: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(96%, 400px);
-  background: #000e;
-  border: 1px solid #ff4d88;
-  padding: 8px;
-  border-radius: 12px;
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.debug-title {
-  width: 100%;
-  font-size: 10px;
-  color: #ff9fc4;
-  margin-bottom: 3px;
-}
-
-.debug-btn {
-  background: #333;
-  color: white;
-  border: 0;
-  padding: 6px 8px;
-  font-size: 11px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.debug-btn.active-debug {
-  background: #ff4d88;
-}
-
 @media (max-height: 700px) {
   .screen {
     padding-top: 12px;
@@ -591,21 +551,6 @@ p {
   </section>
 </div>
 
-<div class="debug-panel" id="debug-panel">
-  <div class="debug-title">TEST MODE — Preview only; does not unlock PIN</div>
-  <button class="debug-btn" onclick="testScreen(1)">S1</button>
-  <button class="debug-btn" onclick="testScreen(2)">S2</button>
-  <button class="debug-btn" onclick="testScreen(3)">S3</button>
-  <button class="debug-btn" onclick="testScreen(4)">S4</button>
-  <button class="debug-btn" onclick="testScreen(5)">S5</button>
-  <button class="debug-btn" onclick="testScreen(6)">S6</button>
-  <button class="debug-btn" onclick="testScreen(7)">S7</button>
-  <button class="debug-btn" onclick="testScreen(8)">S8</button>
-  <button class="debug-btn" onclick="testScreen(9)">S9</button>
-  <button class="debug-btn" onclick="testScreen(10)">S10</button>
-  <button class="debug-btn" onclick="testScreen(11)">S11</button>
-</div>
-
 <script>
 "use strict";
 
@@ -614,7 +559,6 @@ const BIRTHDAY_TIME = new Date("2026-10-24T00:00:00+05:30").getTime();
 
 let currentScreen = 1;
 let birthdayUnlocked = Date.now() >= BIRTHDAY_TIME;
-let previewMode = false;
 let poppedCount = 0;
 let cakeHasBeenCut = false;
 
@@ -628,13 +572,6 @@ function showScreen(number) {
 
   target.classList.add("active");
   currentScreen = number;
-
-  document.querySelectorAll(".debug-btn").forEach(function(button) {
-    button.classList.remove("active-debug");
-    if (button.textContent === "S" + number) {
-      button.classList.add("active-debug");
-    }
-  });
 }
 
 function openPinScreen() {
@@ -645,7 +582,6 @@ function openPinScreen() {
     return;
   }
 
-  previewMode = false;
   document.getElementById("pinInput").value = "";
   document.getElementById("pinError").textContent = "";
   showScreen(2);
@@ -673,14 +609,13 @@ function checkPin() {
 
   error.textContent = "";
   input.value = "";
-  previewMode = false;
   showScreen(4);
 }
 
 function nextScreen(number) {
   birthdayUnlocked = Date.now() >= BIRTHDAY_TIME;
 
-  if (!birthdayUnlocked && !previewMode) {
+  if (!birthdayUnlocked) {
     showScreen(3);
     return;
   }
@@ -752,13 +687,7 @@ function openEnvelope() {
     "Opened with love! ❤️ Tap Read Your Letter 💌";
 }
 
-function testScreen(number) {
-  previewMode = true;
-  showScreen(number);
-}
-
 function restartWebsite() {
-  previewMode = false;
   birthdayUnlocked = Date.now() >= BIRTHDAY_TIME;
 
   poppedCount = 0;
